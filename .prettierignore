@@ -1,0 +1,7 @@
+.husky
+.gitignore
+.prettierignore
+*.svg
+node_modules
+public
+build

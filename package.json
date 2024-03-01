@@ -1,29 +1,94 @@
 {
-  "name": "guestfriend",
-  "version": "0.1.0",
+  "name": "guestfriend-test",
+  "version": "1.0.0",
   "private": true,
+  "description": "Guestfriend FE dev test",
+  "author": {
+    "name": "Bojan Radičević",
+    "email": "bojan.radicevic.83@gmail.com"
+  },
+  "engines": {
+    "node": ">= 18.0.0",
+    "yarn": "^1.22.21"
+  },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.8.1",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.0.1",
-    "@testing-library/user-event": "^14.1.1",
+    "@reduxjs/toolkit": "^2.2.1",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.0.1",
+    "react-redux": "^9.1.0",
+    "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.0"
+    "styled-components": "^6.1.8"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write --ignore-unknown .",
+    "lint": "eslint --quiet --fix .",
+    "postinstall": "husky"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "plugin:prettier/recommended"
+    ],
+    "rules": {
+      "import/prefer-default-export": 0,
+      "import/no-unresolved": 0,
+      "import/no-duplicates": 1,
+      "no-duplicate-imports": 1,
+      "import/no-namespace": 0,
+      "no-eval": 1,
+      "no-console": 1,
+      "no-debugger": 1,
+      "no-var": 1,
+      "no-use-before-define": 1,
+      "no-constant-condition": 0,
+      "no-duplicate-case": 1,
+      "no-unused-vars": 1,
+      "no-dupe-keys": 1,
+      "no-empty": 1,
+      "no-unreachable": 1,
+      "use-isnan": 2,
+      "valid-typeof": 1,
+      "eqeqeq": 1,
+      "no-alert": 1,
+      "no-eq-null": 1,
+      "no-redeclare": 1,
+      "curly": 1,
+      "semi": 1,
+      "no-empty-function": 0,
+      "object-shorthand": 0,
+      "default-case": 1,
+      "dot-notation": 1,
+      "dot-location": 0,
+      "no-compare-neg-zero": 1,
+      "no-dupe-args": 1,
+      "no-extra-semi": 1,
+      "no-extra-parens": 0,
+      "arrow-body-style": 0,
+      "operator-assignment": 0,
+      "prefer-const": 1,
+      "no-invalid-this": 0,
+      "no-else-return": 0,
+      "operator-assigment": 0,
+      "no-obj-calls": 1,
+      "no-self-assign": 1,
+      "react-hooks/exhaustive-deps": 0,
+      "block-spacing": 1,
+      "comma-spacing": 1,
+      "comma-style": 1,
+      "comma-dangle": 0,
+      "prefer-arrow-callback": 0,
+      "react/prop-types": 0
+    }
   },
   "browserslist": {
     "production": [
@@ -35,6 +100,22 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "lint-staged": "15.2.2",
+    "prettier": "3.2.5"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json,js,jsx,html}": [
+      "prettier --write --ignore-unknown"
     ]
   }
 }

@@ -1,46 +1,80 @@
-# Getting Started with Create React App and Redux
+# Guestfriend FE dev test
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+This is a simple web app project in [React.js](https://reactjs.org/) bootstrapped with [Create React App](https://github.com/facebook/create-react-app),
+using [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/).
 
-## Available Scripts
+Code is deployed to GitHub https://github.com/bojan-radicevic/guestfriend-test.
 
-In the project directory, you can run:
+## Technical spec
 
-### `yarn start`
+[Node.js](https://nodejs.org/) version used `v18.17.1`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+[Yarn](https://yarnpkg.com/) version used `1.22.21`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started DEV
 
-### `yarn test`
+First, install `node_modules`:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+yarn
+```
 
-### `yarn build`
+Then, start the React development server:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+yarn start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Open [http://localhost:3000](http://localhost:3000) with your browser
+to see the result.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started PROD
 
-### `yarn eject`
+First, install `node_modules`:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+yarn
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Then, build project:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+yarn build
+```
+And finally, start the Express server:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+yarn start
+```
 
-## Learn More
+## Styling
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+[styled-components](https://styled-components.com/) were used for styling.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Clean Code
+
+Keep code
+clean with [ESlint](https://eslint.org/) and [Prettier](https://prettier.io/).
+
+To format code on demand with Prettier:
+
+```bash
+yarn run format
+```
+To format code on demand with ESlint:
+
+```bash
+yarn run lint
+```
+[Husky](https://typicode.github.io/husky/) is doing both on every git commit.
+
+## Useful Links
+
+To learn more about technologies used, take a look at the following resources:
+
+-   [React.js Documentation](https://reactjs.org/docs/getting-started.html)
+-   [Redux.js Documentation](https://redux.js.org/introduction/getting-started)
+-   [Redux Toolkit Documentation](https://redux-toolkit.js.org/introduction/getting-started)
+-   [React Router Documentation](https://reactrouterdotcom.fly.dev/docs/en/v6)
+-   [Husky Documentation](https://typicode.github.io/husky/)
+-   [styled-components Documentation](https://styled-components.com/docs)
