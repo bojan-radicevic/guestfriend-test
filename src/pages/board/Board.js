@@ -84,7 +84,7 @@ export const Board = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd} data-testid="board">
       <Wrapper>
         <SearchInput />
         <Container>

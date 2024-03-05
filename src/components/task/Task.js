@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { deleteTask, editTask } from 'store/board/boardSlice';
 
+import { useEscapeKey } from 'hooks/useEscapeKey';
+
 import { ResizableTextarea } from 'components/resizable-textarea/ResizableTextarea';
 import { PromptModal } from 'components/task/ui/PromptModal';
 import { Container, Close, Handle, EditWrapper } from 'components/task/styles';
 import { Error } from 'styles/error';
 
-import { COLOR_PALETTE } from 'util/constants/defaultValues';
+import {
+  COLOR_PALETTE,
+  MIN_INPUT_LENGTH,
+  MAX_INPUT_LENGTH
+} from 'util/constants/defaultValues';
 
 export const Task = ({ task, index, columnId }) => {
   const { t } = useTranslation();
@@ -20,16 +26,6 @@ export const Task = ({ task, index, columnId }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const closeOnEscapePressed = event => {
-      if (event.code === 'Escape') {
-        closeModal();
-      }
-    };
-    window.addEventListener('keydown', closeOnEscapePressed);
-    return () => window.removeEventListener('keydown', closeOnEscapePressed);
-  }, []);
 
   const openModal = () => {
     setModalOpen(true);
@@ -43,6 +39,8 @@ export const Task = ({ task, index, columnId }) => {
     setHasError(false);
   };
 
+  useEscapeKey(closeModal);
+
   const handleDoubleClick = () => {
     setIsEditing(true);
   };
@@ -50,14 +48,14 @@ export const Task = ({ task, index, columnId }) => {
   const handleBlur = event => {
     event.preventDefault();
 
-    if (taskContent?.trim()?.length < 3) {
+    if (taskContent?.trim()?.length < MIN_INPUT_LENGTH) {
       setError({ key: 'insufficient_length', count: 2 });
       setHasError(true);
       return;
     }
 
-    if (taskContent?.trim()?.length > 65) {
-      setError({ key: 'oversize_length', count: 65 });
+    if (taskContent?.trim()?.length > MAX_INPUT_LENGTH) {
+      setError({ key: 'oversize_length', count: MAX_INPUT_LENGTH });
       setHasError(true);
       return;
     }

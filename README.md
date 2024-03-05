@@ -61,6 +61,16 @@ yarn start
 
 [styled-components](https://styled-components.com/) were used for styling.
 
+## Testing
+
+Tests are written
+with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+with [Jest](https://jestjs.io/) as test runner
+
+```bash
+yarn test
+```
+
 ## Clean Code
 
 Keep code
@@ -92,3 +102,5 @@ To learn more about technologies used, take a look at the following resources:
 - [styled-components Documentation](https://styled-components.com/docs)
 - [react-beautiful-dnd Documentation](https://github.com/atlassian/react-beautiful-dnd)
 - [react-i18next Documentation](https://react.i18next.com/)
+- [React Testing Library Documentation](https://testing-library.com/docs/)
+- [Jest Documentation](https://jestjs.io/docs/getting-started)

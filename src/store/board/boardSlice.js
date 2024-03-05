@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
-import { INITIAL_REDUX_STATE } from 'util/constants/defaultValues';
+import {
+  INITIAL_REDUX_STATE,
+  MIN_INPUT_LENGTH
+} from 'util/constants/defaultValues';
 import { searchHelper } from 'util/helpers/searchHelper';
 
 export const boardSlice = createSlice({
@@ -111,7 +114,7 @@ export const boardSlice = createSlice({
     editTask: (state, action) => {
       const { taskId, taskContent } = action.payload;
 
-      if (!taskContent || taskContent?.length < 3) {
+      if (!taskContent || taskContent?.length < MIN_INPUT_LENGTH) {
         return;
       }
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { COLOR_PALETTE } from 'util/constants/defaultValues';
+
 import {
   Add,
   AddWrapper,
@@ -13,7 +15,7 @@ export const ColumnHeader = ({ column, tasks, openModal }) => {
   const { t } = useTranslation();
 
   return (
-    <Header $columnId={column.id}>
+    <Header $color={COLOR_PALETTE[column.id]?.primary}>
       <Title>
         {t(`column.${column.id}`)}
         <Counter>({tasks?.length})</Counter>

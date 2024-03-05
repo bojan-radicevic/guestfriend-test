@@ -61,7 +61,11 @@ export const SearchInput = () => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
-        <Search $hover={showSearchInput} $searchTerm={searchTerm} />
+        <Search
+          $hover={showSearchInput}
+          $searchTerm={searchTerm}
+          data-testid="search-icon"
+        />
         <Input
           type="text"
           onChange={onChange}

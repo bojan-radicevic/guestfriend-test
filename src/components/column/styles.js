@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { COLOR_PALETTE } from 'util/constants/defaultValues';
-
 import { ReactComponent as AddIcon } from 'assets/icons/plus_icon.svg';
 
 const Container = styled.div`
@@ -17,7 +15,7 @@ const Header = styled.div`
   align-items: center;
   padding: 10px;
   min-height: 98px;
-  background-color: ${({ $columnId }) => COLOR_PALETTE[$columnId].primary};
+  background-color: ${({ $color }) => $color};
   color: #fff;
 `;
 
@@ -53,7 +51,7 @@ const List = styled.div`
   align-items: center;
   padding: 8px;
   transition: background-color 0.2s ease;
-  background-color: ${({ $columnId }) => COLOR_PALETTE[$columnId].tertiary};
+  background-color: ${({ $color }) => $color};
   flex-grow: 1;
   min-height: 100px;
   overflow: auto;
@@ -69,7 +67,7 @@ const List = styled.div`
 `;
 
 const AddTaskModalTitle = styled.span`
-  color: ${({ $columnId }) => COLOR_PALETTE[$columnId].primary};
+  color: ${({ $color }) => $color};
 `;
 
 const PromptModalTitle = styled.h4`

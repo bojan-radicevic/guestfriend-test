@@ -1,6 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  MIN_INPUT_LENGTH,
+  MAX_INPUT_LENGTH,
+  COLOR_PALETTE
+} from 'util/constants/defaultValues';
+
 import { ResizableTextarea } from 'components/resizable-textarea/ResizableTextarea';
 import { AddTaskModalTitle } from 'components/column/styles';
 import { SubmitButton } from 'styles/buttons';
@@ -24,7 +30,7 @@ export const AddTaskModal = ({
     <Modal isOpen={modalOpen} onClose={closeModal}>
       <h4>
         {t('column.add_task')}{' '}
-        <AddTaskModalTitle $columnId={column.id}>
+        <AddTaskModalTitle $color={COLOR_PALETTE[column.id]?.primary}>
           {t(`column.${column.id}`)}
         </AddTaskModalTitle>{' '}
         {t('column.add_task_suffix')}
@@ -39,7 +45,12 @@ export const AddTaskModal = ({
           onChange={handleInputChange}
           value={taskContent}
         ></ResizableTextarea>
-        <SubmitButton disabled={taskContent?.trim()?.length < 3}>
+        <SubmitButton
+          disabled={
+            taskContent?.trim()?.length < MIN_INPUT_LENGTH ||
+            taskContent?.trim()?.length > MAX_INPUT_LENGTH
+          }
+        >
           Submit
         </SubmitButton>
       </form>

@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
 
 import { addTask } from 'store/board/boardSlice';
+
+import { useEscapeKey } from 'hooks/useEscapeKey';
+
+import {
+  COLOR_PALETTE,
+  MAX_INPUT_LENGTH,
+  MIN_INPUT_LENGTH
+} from 'util/constants/defaultValues';
 
 import { TasksList } from 'components/tasks-list/TasksList';
 import { ColumnHeader } from 'components/column/ui/ColumnHeader';
@@ -16,16 +24,6 @@ export const Column = ({ column, tasks }) => {
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const closeOnEscapePressed = event => {
-      if (event.code === 'Escape') {
-        closeModal();
-      }
-    };
-    window.addEventListener('keydown', closeOnEscapePressed);
-    return () => window.removeEventListener('keydown', closeOnEscapePressed);
-  }, []);
-
   const openModal = () => {
     setModalOpen(true);
   };
@@ -37,16 +35,18 @@ export const Column = ({ column, tasks }) => {
     setHasError(false);
   };
 
+  useEscapeKey(closeModal);
+
   const handleAddTask = event => {
     event.preventDefault();
 
-    if (taskContent?.trim()?.length < 3) {
+    if (taskContent?.trim()?.length < MIN_INPUT_LENGTH) {
       setError({ key: 'insufficient_length', count: 2 });
       setHasError(true);
       return;
     }
-    if (taskContent?.trim()?.length > 65) {
-      setError({ key: 'oversize_length', count: 65 });
+    if (taskContent?.trim()?.length > MAX_INPUT_LENGTH) {
+      setError({ key: 'oversize_length', count: MAX_INPUT_LENGTH });
       setHasError(true);
       return;
     }
@@ -56,10 +56,6 @@ export const Column = ({ column, tasks }) => {
   };
 
   const handleKeyPress = event => {
-    if (event.code === 'Escape') {
-      closeModal();
-    }
-
     if (event.code === 'Enter' && event.shiftKey) {
       setTaskContent(event.target.value);
     }
@@ -89,7 +85,7 @@ export const Column = ({ column, tasks }) => {
               ref={provided.innerRef}
               {...provided.droppableProps}
               $isDraggingOver={snapshot.isDraggingOver}
-              $columnId={column.id}
+              $color={COLOR_PALETTE[column.id]?.tertiary}
             >
               <TasksList tasks={tasks} columnId={column.id} />
               {provided.placeholder}
