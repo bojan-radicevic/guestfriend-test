@@ -1,92 +1,87 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { deleteTask, editTask } from 'store/board/boardSlice';
 
 import { ResizableTextarea } from 'components/resizable-textarea/ResizableTextarea';
+import { PromptModal } from 'components/task/ui/PromptModal';
+import { Container, Close, Handle, EditWrapper } from 'components/task/styles';
+import { Error } from 'styles/error';
 
-import { ReactComponent as CloseIcon } from 'assets/icons/close_icon.svg';
-
-const handleTaskColorById = id => {
-  switch (id) {
-    case 'to_do':
-      return '#08b4e9';
-    case 'in_progress':
-      return '#fc5f78';
-    case 'done':
-      return '#446076';
-    default:
-      return '#08b4e9';
-  }
-};
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-  width: 100%;
-`;
-
-const Handle = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  background-color: ${({ $columnId, $draggingOver }) =>
-    $draggingOver
-      ? handleTaskColorById($draggingOver)
-      : handleTaskColorById($columnId)};
-  width: 130px;
-  min-height: 140px;
-  height: 140px;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  text-align: center;
-  color: #fff;
-  font-weight: bold;
-  font-size: 1.1rem;
-`;
-
-const Close = styled(CloseIcon)`
-  width: 28px;
-  height: 28px;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  cursor: pointer;
-  display: none;
-
-  ${Handle}:hover & {
-    display: initial;
-  }
-`;
+import { COLOR_PALETTE } from 'util/constants/defaultValues';
 
 export const Task = ({ task, index, columnId }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [taskContent, setTaskContent] = useState(task?.content);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const closeOnEscapePressed = event => {
+      if (event.code === 'Escape') {
+        closeModal();
+      }
+    };
+    window.addEventListener('keydown', closeOnEscapePressed);
+    return () => window.removeEventListener('keydown', closeOnEscapePressed);
+  }, []);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setIsEditing(false);
+    setTaskContent(task?.content);
+    setError(null);
+    setHasError(false);
+  };
 
   const handleDoubleClick = () => {
     setIsEditing(true);
   };
 
-  const handleBlur = () => {
-    dispatch(editTask({ taskId: task.id, taskContent }));
+  const handleBlur = event => {
+    event.preventDefault();
+
+    if (taskContent?.trim()?.length < 3) {
+      setError({ key: 'insufficient_length', count: 2 });
+      setHasError(true);
+      return;
+    }
+
+    if (taskContent?.trim()?.length > 65) {
+      setError({ key: 'oversize_length', count: 65 });
+      setHasError(true);
+      return;
+    }
+
+    dispatch(editTask({ taskId: task.id, taskContent: taskContent.trim() }));
     setIsEditing(false);
   };
 
   const handleKeyPress = event => {
-    if (event.code === 'Enter') {
-      handleBlur();
+    if (event.code === 'Enter' && event.shiftKey) {
+      setTaskContent(event.target.value);
+    }
+
+    if (event.code === 'Enter' && !event.shiftKey) {
+      handleBlur(event);
     }
   };
 
   const handleInputChange = event => {
+    if (hasError) {
+      setError(null);
+      setHasError(false);
+    }
+
     setTaskContent(event.target.value);
   };
 
@@ -99,19 +94,27 @@ export const Task = ({ task, index, columnId }) => {
       {(provided, snapshot) => (
         <Container {...provided.draggableProps} ref={provided.innerRef}>
           {isEditing ? (
-            <ResizableTextarea
-              name="taskContent"
-              onChange={handleInputChange}
-              onBlur={handleBlur}
-              onKeyDown={handleKeyPress}
-              value={taskContent}
-              customStyles={{
-                minHeight: '140px',
-                height: '140px',
-                marginBottom: '0px',
-                borderColor: handleTaskColorById(columnId)
-              }}
-            ></ResizableTextarea>
+            <EditWrapper>
+              <ResizableTextarea
+                name="taskContent"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyPress}
+                value={taskContent}
+                customStyles={{
+                  minHeight: '104px',
+                  height: '104px',
+                  marginBottom: '0px',
+                  borderColor: COLOR_PALETTE[columnId].secondary
+                }}
+              ></ResizableTextarea>
+              <Error>
+                {' '}
+                {hasError
+                  ? t(`errors.${error?.key}`, { count: error?.count })
+                  : ''}
+              </Error>
+            </EditWrapper>
           ) : (
             <Handle
               {...provided.dragHandleProps}
@@ -119,10 +122,15 @@ export const Task = ({ task, index, columnId }) => {
               $draggingOver={snapshot.draggingOver}
               onDoubleClick={handleDoubleClick}
             >
-              <Close onClick={handleDeleteTask} />
+              <Close onClick={openModal} />
               {task.content}
             </Handle>
           )}
+          <PromptModal
+            modalOpen={modalOpen}
+            closeModal={closeModal}
+            handleDeleteTask={handleDeleteTask}
+          />
         </Container>
       )}
     </Draggable>

@@ -1,17 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Outlet } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-const LayoutContainer = styled.main`
-  height: 100vh;
-  overflow: hidden;
-  width: 100vw;
-  padding: 16px;
-  overflow-x: auto;
-`;
+import { store } from 'store/store';
+import { Router } from 'app/Router';
 
 export const App = () => (
-  <LayoutContainer>
-    <Outlet />
-  </LayoutContainer>
+  <Provider store={store}>
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  </Provider>
 );

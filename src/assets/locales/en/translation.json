@@ -1,0 +1,17 @@
+{
+  "errors": {
+    "insufficient_length_one": "Input has to be longer than {{count}} character!",
+    "insufficient_length_other": "Input has to be longer than {{count}} characters!",
+    "oversize_length": "Input has to be less than {{count}} characters!"
+  },
+  "column": {
+    "to_do": "To Do",
+    "in_progress": "In Progress",
+    "done": "Done",
+    "add_task": "Add task to",
+    "add_task_suffix": "column"
+  },
+  "task": {
+    "delete_task_prompt": "Are you sure you want to delete task?"
+  }
+}

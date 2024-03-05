@@ -1,59 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import debounce from 'lodash.debounce';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { searchTasks } from 'store/board/boardSlice';
 
-import { ReactComponent as SearchIcon } from 'assets/icons/search_icon.svg';
-
-const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  justify-content: end;
-  width: 736px;
-`;
-
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  padding: 8px 12px 8px 32px;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  outline: none;
-  font-size: 16px;
-  width: 346px;
-  margin-left: auto;
-
-  &:focus {
-    border-color: #0096e0;
-  }
-`;
-
-const Search = styled(SearchIcon)`
-  position: absolute;
-  left: 8px;
-  width: 24px;
-  height: 24px;
-`;
-
-const Error = styled.span`
-  display: flex;
-  align-items: center;
-  color: red;
-  height: 24px;
-`;
+import { Error } from 'styles/error';
+import { Container, Input, Search, Wrapper } from 'components/search/styles';
 
 export const SearchInput = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
+  const targetRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [hasError, setHasError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const showSearchInput = isHovered || isFocused;
 
   const searchHandler = searchTerm => {
     if (searchTerm && searchTerm?.length < 2) {
@@ -63,7 +26,7 @@ export const SearchInput = () => {
     dispatch(searchTasks({ searchTerm }));
   };
 
-  const searchHandlerDebounce = useCallback(debounce(searchHandler, 500), []);
+  const searchHandlerDebounce = useCallback(debounce(searchHandler, 300), []);
 
   useEffect(() => {
     searchHandlerDebounce(searchTerm);
@@ -72,6 +35,15 @@ export const SearchInput = () => {
       searchHandlerDebounce.cancel();
     };
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (showSearchInput) {
+      // Set focus at the end of text
+      const len = searchTerm?.length;
+      targetRef.current.setSelectionRange(len, len);
+      targetRef.current.focus();
+    }
+  }, [showSearchInput]);
 
   const onChange = event => {
     if (hasError) {
@@ -83,12 +55,22 @@ export const SearchInput = () => {
 
   return (
     <Wrapper>
-      <Container>
-        <Search />
-        <Input type="text" onChange={onChange} />
+      <Container
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      >
+        <Search $hover={showSearchInput} $searchTerm={searchTerm} />
+        <Input
+          type="text"
+          onChange={onChange}
+          $hover={showSearchInput}
+          ref={targetRef}
+        />
       </Container>
       <Error>
-        {hasError ? 'Search term has to be longer than 1 character!' : ''}
+        {hasError ? t('errors.insufficient_length', { count: 1 }) : ''}
       </Error>
     </Wrapper>
   );

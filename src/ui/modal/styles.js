@@ -1,4 +1,3 @@
-import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
 import { ReactComponent as CloseIcon } from 'assets/icons/close_icon.svg';
@@ -60,18 +59,4 @@ const Close = styled(CloseIcon)`
   }
 `;
 
-export const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <ModalWrapper>
-      <Backdrop onClick={onClose} />
-      <ModalContent>
-        <Close onClick={onClose} />
-        {children}
-      </ModalContent>
-    </ModalWrapper>
-  );
-};
+export { Close, Backdrop, ModalContent, ModalWrapper };

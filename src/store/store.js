@@ -1,23 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import boardReducer from 'store/board/boardSlice';
+import { boardSlice } from 'store/board/boardSlice';
+import { sessionStorageMiddleware } from 'store/middleware/sessionStorageMiddleware';
 
 import { INITIAL_REDUX_STATE } from 'util/constants/defaultValues';
-
-const sessionStorageMiddleware = store => next => action => {
-  const result = next(action);
-
-  const state = {
-    ...store.getState(),
-    board: {
-      ...store.getState()?.board,
-      search: null
-    }
-  };
-  sessionStorage.setItem('board', JSON.stringify(state));
-
-  return result;
-};
 
 const savedState = sessionStorage.getItem('board');
 const preloadedState = savedState
@@ -26,7 +12,7 @@ const preloadedState = savedState
 
 export const store = configureStore({
   reducer: {
-    board: boardReducer
+    board: boardSlice.reducer
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware(),

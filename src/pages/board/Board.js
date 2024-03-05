@@ -1,5 +1,5 @@
+import { Column } from 'components/column/Column';
 import React from 'react';
-import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -12,21 +12,8 @@ import {
 import { changeOrder, changeColumn } from 'store/board/boardSlice';
 
 import { SearchInput } from 'components/search/Search';
-import { ColumnsList } from 'components/columns-list/ColumnsList';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(100vw - 32px);
-`;
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  width: calc(100vw - 32px);
-  height: calc(100vh - 92px);
-`;
+import { Container, Wrapper } from 'pages/board/styles';
 
 export const Board = () => {
   const tasks = useSelector(selectTasks);
@@ -38,10 +25,12 @@ export const Board = () => {
   const onDragEnd = result => {
     const { destination, source, draggableId } = result;
 
+    // If draggable is moved outside droppable, do nothing
     if (!destination) {
       return;
     }
 
+    // If draggable is dropped on the same place it started do nothing
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -49,9 +38,11 @@ export const Board = () => {
       return;
     }
 
+    // Get source column and destination column
     const start = columns[source.droppableId];
     const finish = columns[destination.droppableId];
 
+    // Moving in the same list
     if (start === finish) {
       const newTaskIds = [...start.taskIds];
       newTaskIds.splice(source.index, 1);
@@ -97,17 +88,11 @@ export const Board = () => {
       <Wrapper>
         <SearchInput />
         <Container>
-          {columnOrder.map((columnId, index) => {
+          {columnOrder.map(columnId => {
             const column = search ? search[columnId] : columns[columnId];
+            const tasksMap = column.taskIds.map(taskId => tasks[taskId]);
 
-            return (
-              <ColumnsList
-                key={column.id}
-                column={column}
-                index={index}
-                taskMap={tasks}
-              />
-            );
+            return <Column key={column.id} column={column} tasks={tasksMap} />;
           })}
         </Container>
       </Wrapper>

@@ -1,7 +1,16 @@
 # Guestfriend FE dev test
 
-This is a simple web app project in [React.js](https://reactjs.org/) bootstrapped with [Create React App](https://github.com/facebook/create-react-app),
-using [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/).
+This is a simple web app project in [React.js](https://reactjs.org/)
+bootstrapped
+with [Create React App](https://github.com/facebook/create-react-app),
+using [Redux](https://redux.js.org/)
+and [Redux Toolkit](https://redux-toolkit.js.org/).
+
+[react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd) was
+used for drag and drop.
+
+[react-i18next](https://github.com/i18next/react-i18next) was
+used for i18n.
 
 Code is deployed to GitHub https://github.com/bojan-radicevic/guestfriend-test.
 
@@ -41,6 +50,7 @@ Then, build project:
 ```bash
 yarn build
 ```
+
 And finally, start the Express server:
 
 ```bash
@@ -61,20 +71,24 @@ To format code on demand with Prettier:
 ```bash
 yarn run format
 ```
+
 To format code on demand with ESlint:
 
 ```bash
 yarn run lint
 ```
+
 [Husky](https://typicode.github.io/husky/) is doing both on every git commit.
 
 ## Useful Links
 
 To learn more about technologies used, take a look at the following resources:
 
--   [React.js Documentation](https://reactjs.org/docs/getting-started.html)
--   [Redux.js Documentation](https://redux.js.org/introduction/getting-started)
--   [Redux Toolkit Documentation](https://redux-toolkit.js.org/introduction/getting-started)
--   [React Router Documentation](https://reactrouterdotcom.fly.dev/docs/en/v6)
--   [Husky Documentation](https://typicode.github.io/husky/)
--   [styled-components Documentation](https://styled-components.com/docs)
+- [React.js Documentation](https://reactjs.org/docs/getting-started.html)
+- [Redux.js Documentation](https://redux.js.org/introduction/getting-started)
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/introduction/getting-started)
+- [React Router Documentation](https://reactrouterdotcom.fly.dev/docs/en/v6)
+- [Husky Documentation](https://typicode.github.io/husky/)
+- [styled-components Documentation](https://styled-components.com/docs)
+- [react-beautiful-dnd Documentation](https://github.com/atlassian/react-beautiful-dnd)
+- [react-i18next Documentation](https://react.i18next.com/)

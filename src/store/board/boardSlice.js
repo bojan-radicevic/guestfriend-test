@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 import { INITIAL_REDUX_STATE } from 'util/constants/defaultValues';
+import { searchHelper } from 'util/helpers/searchHelper';
 
 export const boardSlice = createSlice({
   name: 'board',
@@ -10,36 +11,68 @@ export const boardSlice = createSlice({
     changeOrder: (state, action) => {
       const { newColumn, newColumnId } = action.payload;
 
-      state.columns = {
+      const newColumnList = {
         ...state.columns,
         [newColumnId]: newColumn
       };
+
+      if (state.searchTerm) {
+        state.search = searchHelper(
+          newColumnList,
+          state.tasks,
+          state.searchTerm
+        );
+      }
+
+      state.columns = newColumnList;
     },
     changeColumn: (state, action) => {
       const { newStart, newStartId, newFinish, newFinishId } = action.payload;
 
-      state.columns = {
+      const newColumnList = {
         ...state.columns,
         [newStartId]: newStart,
         [newFinishId]: newFinish
       };
+
+      if (state.searchTerm) {
+        state.search = searchHelper(
+          newColumnList,
+          state.tasks,
+          state.searchTerm
+        );
+      }
+
+      state.columns = newColumnList;
     },
     addTask: (state, action) => {
       const { columnId, taskContent } = action.payload;
       const ID = uuidv4();
 
-      state.tasks = {
+      const newTaskList = {
         ...state.tasks,
         [`${ID}`]: { id: ID, content: taskContent }
       };
 
-      state.columns = {
+      const newColumnList = {
         ...state.columns,
         [columnId]: {
           ...state.columns[columnId],
           taskIds: [ID, ...state.columns[columnId].taskIds]
         }
       };
+
+      if (state.searchTerm) {
+        state.search = searchHelper(
+          newColumnList,
+          newTaskList,
+          state.searchTerm
+        );
+      }
+
+      state.tasks = newTaskList;
+
+      state.columns = newColumnList;
     },
     deleteTask: (state, action) => {
       const { columnId, taskId } = action.payload;
@@ -49,40 +82,31 @@ export const boardSlice = createSlice({
 
       state.tasks = { ...newTaskList };
 
-      state.columns = {
-        ...state.columns,
+      const deleteTaskHelper = obj => ({
+        ...obj,
         [columnId]: {
-          ...state.columns[columnId],
-          taskIds: state.columns[columnId].taskIds.filter(
-            item => item !== taskId
-          )
+          ...obj[columnId],
+          taskIds: obj[columnId].taskIds.filter(item => item !== taskId)
         }
-      };
+      });
+
+      if (state.search) {
+        state.search = deleteTaskHelper(state.search);
+      }
+
+      state.columns = deleteTaskHelper(state.columns);
     },
     searchTasks: (state, action) => {
       const { searchTerm } = action.payload;
 
       if (!searchTerm || searchTerm?.length < 2) {
         state.search = null;
+        state.searchTerm = '';
         return;
       }
 
-      const result = {};
-
-      for (const [key, value] of Object.entries(state.columns)) {
-        const tasks = value.taskIds;
-
-        result[key] = {
-          ...value,
-          taskIds: tasks.filter(task =>
-            state.tasks[task].content
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase().trim())
-          )
-        };
-      }
-
-      state.search = result;
+      state.search = searchHelper(state.columns, state.tasks, searchTerm);
+      state.searchTerm = searchTerm;
     },
     editTask: (state, action) => {
       const { taskId, taskContent } = action.payload;
@@ -107,5 +131,3 @@ export const {
   searchTasks,
   editTask
 } = boardSlice.actions;
-
-export default boardSlice.reducer;
